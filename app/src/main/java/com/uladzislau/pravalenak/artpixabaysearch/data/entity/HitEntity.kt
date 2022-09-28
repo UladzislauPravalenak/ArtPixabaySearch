@@ -1,16 +1,31 @@
 package com.uladzislau.pravalenak.artpixabaysearch.data.entity
 
-data class Hit(
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class HitEntity(
+    @SerialName("id")
     val id: Int,
+    @SerialName("type")
     val type: String,
-    val tags: List<String>,
-    val imageURL: String,
-    val views: Int,
-    val downloads: Int,
-    val likes: Int,
-    val comments: Int,
-    val user_id: Int,
-    val user: String,
+    @SerialName("tags")
+    val tags: String,
+    @SerialName("previewURL")
+    val url: String,
+    @SerialName("views")
+    val viewsCount: Int,
+    @SerialName("downloads")
+    val downloadsCount: Int,
+    @SerialName("likes")
+    val likesCount: Int,
+    @SerialName("comments")
+    val commentsCount: Int,
+    @SerialName("user_id")
+    val userId: Int,
+    @SerialName("user")
+    val userName: String,
+    @SerialName("userImageURL")
     val userImageURL: String
 )
 //{
