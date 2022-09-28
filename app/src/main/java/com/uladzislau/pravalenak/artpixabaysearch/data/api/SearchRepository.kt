@@ -1,13 +1,17 @@
 package com.uladzislau.pravalenak.artpixabaysearch.data.api
 
-import kotlinx.coroutines.Dispatchers
+import com.uladzislau.pravalenak.artpixabaysearch.data.entity.HitEntity
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-class SearchRepository {
+class SearchRepository(
+    private val api: SearchApi,
+    private val dispatcher: CoroutineDispatcher
+) {
 
-    suspend fun search(query: String) {
-        withContext(Dispatchers.IO) {
-            query.replace(" ", "+")
+    suspend fun search(query: String): Result<List<HitEntity>> =
+        withContext(dispatcher) {
+            kotlin.runCatching { api.search(query) }
+                .map { it.hits }
         }
-    }
 }
