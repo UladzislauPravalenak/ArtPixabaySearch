@@ -32,5 +32,6 @@ class SearchImageViewHolder(private val binding: ItemImageSearchBinding) :
     fun onBind(hitUI: HitUI) {
         binding.authorNameTV.text = hitUI.userName
         binding.contentIV.load(hitUI.url)
+        binding.tagsTV.text = hitUI.tags.joinToString()
     }
 }
