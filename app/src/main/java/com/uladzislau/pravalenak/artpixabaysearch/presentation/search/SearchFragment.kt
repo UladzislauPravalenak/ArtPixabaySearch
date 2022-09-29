@@ -26,7 +26,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.imagesRV.adapter = this.adapter
 
-        lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             searchViewModel
                 .stateFlow
 //                .flowWithLifecycle(lifecycle)

@@ -11,7 +11,7 @@ class SearchRepository(
 
     suspend fun search(query: String): Result<List<HitEntity>> =
         withContext(dispatcher) {
-            kotlin.runCatching { api.search(query) }
+            runCatching { api.search(query) }
                 .map { it.hits }
         }
 }
