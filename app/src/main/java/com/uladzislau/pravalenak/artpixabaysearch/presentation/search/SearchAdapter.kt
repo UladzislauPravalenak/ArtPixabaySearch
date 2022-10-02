@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.uladzislau.pravalenak.artpixabaysearch.databinding.ItemImageSearchBinding
 
-class SearchAdapter : RecyclerView.Adapter<SearchImageViewHolder>() {
+class SearchAdapter(
+    val onCLickListener: (Int) -> Unit
+) : RecyclerView.Adapter<SearchImageViewHolder>() {
 
     private val items: MutableList<HitUI> = mutableListOf()
 
@@ -17,10 +19,18 @@ class SearchAdapter : RecyclerView.Adapter<SearchImageViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchImageViewHolder =
-        SearchImageViewHolder(ItemImageSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        SearchImageViewHolder(
+            ItemImageSearchBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
 
     override fun onBindViewHolder(holder: SearchImageViewHolder, position: Int) {
-        holder.onBind(items[position])
+        val item = items[position]
+        holder.onBind(item)
+        holder.itemView.setOnClickListener { onCLickListener(item.id) }
     }
 
     override fun getItemCount(): Int = items.size
