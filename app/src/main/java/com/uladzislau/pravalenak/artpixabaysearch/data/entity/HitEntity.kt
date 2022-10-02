@@ -26,7 +26,9 @@ data class HitEntity(
     @SerialName("user")
     val userName: String,
     @SerialName("userImageURL")
-    val userImageURL: String
+    val userImageURL: String,
+    @SerialName("largeImageURL")
+    val largeImageURL: String
 )
 //{
 //    "type": "photo",
