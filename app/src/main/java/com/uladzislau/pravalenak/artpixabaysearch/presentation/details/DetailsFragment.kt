@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import coil.load
-import com.uladzislau.pravalenak.artpixabaysearch.R
+import com.uladzislau.pravalenak.artpixabaysearch.data.api.DownloadManager
 import com.uladzislau.pravalenak.artpixabaysearch.databinding.FragmentDetailsBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.withContext
 
 class DetailsFragment : Fragment() {
 
@@ -19,6 +20,7 @@ class DetailsFragment : Fragment() {
         get() = requireNotNull(_binding)
 
     private val viewModel by lazy { DetailsViewModel() }
+    private val manager: DownloadManager by lazy { DownloadManager(requireContext().applicationContext) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +37,6 @@ class DetailsFragment : Fragment() {
     ): View = FragmentDetailsBinding.inflate(inflater).also { _binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-
-        }
         viewModel.detailedHitStateFlow
             .combine(viewModel.loadingStateFlow) { hit: DetailedHitUI, isLoading: Boolean ->
                 when (isLoading) {
@@ -49,7 +48,15 @@ class DetailsFragment : Fragment() {
                         binding.likesTV.text = hit.likesCount.toString()
                         binding.userNameTV.text = hit.userName
 
-                        binding.contentIV.load(hit.url)
+                        val name = hit.url.substring(24 until hit.url.length)
+                        val bitmap = manager.getFromInternalStorage(name)
+                            ?: withContext(Dispatchers.IO) {
+                                manager.mLoad(hit.url)?.also {
+                                    manager.saveToInternalStorage(it, name)
+                                }
+                            }
+
+                        binding.contentIV.setImageBitmap(bitmap)
                         binding.tagsTV.text = hit.tags
                     }
                     true -> binding.root.visibility = View.INVISIBLE

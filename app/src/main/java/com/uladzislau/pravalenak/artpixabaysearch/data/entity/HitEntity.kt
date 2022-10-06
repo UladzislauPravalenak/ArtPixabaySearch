@@ -30,6 +30,7 @@ data class HitEntity(
     @SerialName("largeImageURL")
     val largeImageURL: String
 )
+
 //{
 //    "type": "photo",
 //    "tags": "blossom, bloom, flower",
