@@ -5,11 +5,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+
 val searchRepository: SearchRepository = SearchRepository(SearchApi(ktorHttpClient), Dispatchers.IO)
 
 class SearchRepository(
     private val api: SearchApi,
-    private val dispatcher: CoroutineDispatcher
+    private val dispatcher: CoroutineDispatcher,
+//    private val manager: DownloadManager
 ) {
     private val entitiesMap = hashMapOf<String, List<HitEntity>>()
 
@@ -29,7 +31,9 @@ class SearchRepository(
         withContext(dispatcher) {
             when (entitiesMap.containsKey(query)) {
                 false -> search(query).map { it.first { it.id == id } }
-                true -> Result.success(requireNotNull(entitiesMap[query]).first { it.id == id })
+                true -> Result.success(requireNotNull(entitiesMap[query]).first {
+                    it.id == id
+                })
             }
         }
 }
